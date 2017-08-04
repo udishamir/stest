@@ -12,7 +12,7 @@ int main(int argc, char *argv[]){
    FilesCreate(NumberOffiles);
 
    // testing WinHTTP IOC
-   ConnectWinHttp();
+   ConnectWinHttp("www.microsoft.com");
 
    return 0;
 }

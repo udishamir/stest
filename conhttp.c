@@ -16,7 +16,7 @@
 #include <winhttp.h>
 #include <stdio.h>
 
-int ConnectWinHttp(){
+int ConnectWinHttp(WCHAR *address){
     DWORD dwSize = 0;
     DWORD dwDownloaded = 0;
     LPSTR pszOutBuffer;
@@ -37,7 +37,7 @@ int ConnectWinHttp(){
 		      WINHTTP_NO_PROXY_BYPASS, 0);
     if(hSession){
       // we have valid session
-      hConnect = WinHttpConnect(hSession, L"www.microsoft.com",
+      hConnect = WinHttpConnect(hSession, address,
 		      INTERNET_DEFAULT_HTTPS_PORT, 0);
     }
     if(hConnect){
