@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 int FilesCreate(UINT NumberOffiles);
+int ConnectWinHttp();
 
 int main(int argc, char *argv[]){
    // calling FileCreate for random file creation
@@ -9,6 +10,9 @@ int main(int argc, char *argv[]){
    UINT NumberOffiles = 5;
 
    FilesCreate(NumberOffiles);
+
+   // testing WinHTTP IOC
+   ConnectWinHttp();
 
    return 0;
 }

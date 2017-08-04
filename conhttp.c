@@ -12,10 +12,11 @@
 */
 
 #include <windows.h>
+#include <time.h>
 #include <winhttp.h>
 #include <stdio.h>
 
-int main(){
+int ConnectWinHttp(){
     DWORD dwSize = 0;
     DWORD dwDownloaded = 0;
     LPSTR pszOutBuffer;
@@ -24,6 +25,10 @@ int main(){
    	       hConnect = NULL,
     	       hRequest = NULL;
 
+    double time_spent;
+
+    // measure time
+    clock_t begin = clock();
 
     // Use WinHttpOpen to obtain a session handle.
     hSession = WinHttpOpen(L"IOC HTTP Socket/1.0 Test Suite",
@@ -35,15 +40,24 @@ int main(){
       hConnect = WinHttpConnect(hSession, L"www.microsoft.com",
 		      INTERNET_DEFAULT_HTTPS_PORT, 0);
     }
-
     if(hConnect){
       // we have valid connection handle
-      hRequest = WinHttpOpenRequest( hConnect, L"GET", NULL,
-		      INTERNET_DEFAULT_HTTPS_PORT, 0 ); // will be changed
+      hRequest = WinHttpOpenRequest(hConnect, L"GET", NULL,
+		      NULL, WINHTTP_NO_REFERER,
+                      WINHTTP_DEFAULT_ACCEPT_TYPES,
+                      WINHTTP_FLAG_SECURE);
+    }
 
+    printf("sending GET request .... \n");
+    // sending request
+    if(hRequest){
+       bResults = WinHttpReceiveResponse(hRequest, NULL);
+    } 
+    
+    clock_t end = clock();
+    time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 
-    // creating http request 
-     
+    printf("total function time: %f\n", time_spent); 
     
     // we are done here
     goto cleanup;
