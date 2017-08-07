@@ -5,7 +5,7 @@
 
 // prototypes 
 int FilesCreate(UINT NumberOffiles);
-int ConnectWinHttp();
+int ConnectWininet(LPCTSTR address);
 
 __int64 GetSitesListSize(){
     HANDLE hFile;
@@ -79,7 +79,7 @@ int ReadSiteUrl(int szTestFile){
 			    printf("%s\n", pszFileText);
 
 			    // initiating HTTP connection
-			    ConnectWinHttp(pszFileText);
+			    ConnectWininet(pszFileText);
 		    }
 
 		   // close stream handle

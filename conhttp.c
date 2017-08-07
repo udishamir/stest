@@ -4,8 +4,8 @@
  *    |    |  \__  \ |   /  /_\  \ /    \
  *    |    |   / __ \|   \  \_/   \   |  \
  *    |____|  (____  /___|\_____  /___|  /
- *                       \/           \/     \/
- *  This function utilize WinHTTP library \
+                   \/           \/     \/
+ *  This function utilize Wininet library \
  *  it will test IOC performance
  * 
  * 
@@ -13,10 +13,10 @@
 
 #include <windows.h>
 #include <time.h>
-#include <winhttp.h>
+#include <wininet.h>
 #include <stdio.h>
 
-int ConnectWinHttp(WCHAR *address){
+int ConnectWininet(LPCTSTR address){
     DWORD dwSize = 0;
     DWORD dwDownloaded = 0;
     LPSTR pszOutBuffer;
@@ -25,33 +25,50 @@ int ConnectWinHttp(WCHAR *address){
    	       hConnect = NULL,
     	       hRequest = NULL;
 
+    PCTSTR rgpszAcceptTypes[] = {("/index.html"), NULL};
+
     double time_spent;
 
     // measure time
     clock_t begin = clock();
 
-    // Use WinHttpOpen to obtain a session handle.
-    hSession = WinHttpOpen(L"IOC HTTP Socket/1.0 Test Suite",
-		      WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
-		      WINHTTP_NO_PROXY_NAME,
-		      WINHTTP_NO_PROXY_BYPASS, 0);
+    // Use InternetOpen to obtain a session handle.
+    hSession = InternetOpen("IOC HTTP Socket/1.0",
+		      INTERNET_OPEN_TYPE_DIRECT,
+		      NULL,
+		      NULL,
+		      0);
     if(hSession){
       // we have valid session
-      hConnect = WinHttpConnect(hSession, address,
-		      INTERNET_DEFAULT_HTTPS_PORT, 0);
+      hConnect = InternetConnect(hSession,
+		      address,
+		      INTERNET_DEFAULT_HTTP_PORT,
+		      NULL,
+		      NULL,
+		      INTERNET_SERVICE_HTTP,
+		      0,
+		      0);
     }
     if(hConnect){
       // we have valid connection handle
-      hRequest = WinHttpOpenRequest(hConnect, L"GET", NULL,
-		      NULL, WINHTTP_NO_REFERER,
-                      WINHTTP_DEFAULT_ACCEPT_TYPES,
-                      WINHTTP_FLAG_SECURE);
+      hRequest = HttpOpenRequest(hConnect,
+		      NULL,
+		      "/index.html",
+		      NULL, 
+		      NULL,
+                      NULL,
+                      0,
+		      0);
     }
 
     printf("sending GET request .... \n");
     // sending request
     if(hRequest){
-       bResults = WinHttpReceiveResponse(hRequest, NULL);
+       bResults = HttpSendRequest(hRequest, 
+		       NULL,
+		       0,
+		       NULL,
+		       0);
     } 
     
     clock_t end = clock();
@@ -65,7 +82,7 @@ int ConnectWinHttp(WCHAR *address){
 
 cleanup:
     // Close any open handles.
-    if(hRequest) WinHttpCloseHandle(hRequest);
-    if(hConnect) WinHttpCloseHandle(hConnect);
-    if(hSession) WinHttpCloseHandle(hSession);
+    if(hRequest) InternetCloseHandle(hRequest);
+    if(hConnect) InternetCloseHandle(hConnect);
+    if(hSession) InternetCloseHandle(hSession);
 }
