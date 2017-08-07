@@ -75,9 +75,9 @@ int ReadSiteUrl(int szTestFile){
 				PAGE_READWRITE);
 
             if(pszFileText != NULL){
-		    while((fgets(pszFileText, dwFileSize, fp)) != NULL){
-			    printf("%s\n", pszFileText);
+		    printf("HTTP test ....\n");
 
+		    while((fgets(pszFileText, dwFileSize, fp)) != NULL){
 			    // initiating HTTP connection
 			    ConnectWininet(pszFileText);
 		    }
@@ -101,8 +101,6 @@ int main(int argc, char *argv[]){
     szTestFile = GetSitesListSize();
 
     if(szTestFile){
-	    printf("url file size %db\n", szTestFile);
-
     	    // calling FileCreate for random file creation
     	    FilesCreate(NumberOffiles);
 

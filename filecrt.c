@@ -67,6 +67,8 @@ int FilesCreate(UINT NumberOffiles){
     */
     srand((unsigned)time(NULL));
 
+    printf("IO test ....\n");
+
     // number of iteration //    
     for(uCounter = 0; uCounter <= NumberOffiles; uCounter++){
 
