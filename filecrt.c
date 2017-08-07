@@ -50,7 +50,7 @@ int FilesCreate(UINT NumberOffiles){
     DWORD dwBytesWritten = 0; 
 
     DWORD BytesPerSector = 0; 
-    DWORD Size = 0; // buffer size of your data to write
+    DWORD Size = 0; // data buffer size
 
     TCHAR szTempFileName[MAX_PATH];  
     TCHAR lpTempPathBuffer[MAX_PATH];
@@ -159,11 +159,17 @@ int FilesCreate(UINT NumberOffiles){
 
     	CloseHandle(hFile);
 
-	// stop stopwatch
+	// stop the stopwatch
 	clock_t end = clock();
 	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 
 	printf("total function time: %f\n", time_spent);
+
+	// remove the file, we are done here
+	if((DeleteFile(szTempFileName)) == 0){
+		printf("failed to delete: %s with the following error: %d\n",
+				szTempFileName, GetLastError());
+	}
     }
     
     return 0;

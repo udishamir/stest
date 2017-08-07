@@ -77,6 +77,9 @@ int ReadSiteUrl(int szTestFile){
             if(pszFileText != NULL){
 		    while((fgets(pszFileText, dwFileSize, fp)) != NULL){
 			    printf("%s\n", pszFileText);
+
+			    // initiating HTTP connection
+			    ConnectWinHttp(pszFileText);
 		    }
 
 		   // close stream handle
@@ -106,7 +109,6 @@ int main(int argc, char *argv[]){
     	    // testing WinHTTP IOC
 	    ReadSiteUrl(szTestFile);
 
-    	    ConnectWinHttp("www.microsoft.com");
     }else{
 	    printf("error reading site url file, going out ...\n");
 	    return -1;
