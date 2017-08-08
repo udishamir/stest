@@ -48,6 +48,7 @@ int FilesCreate(UINT NumberOffiles){
 
     DWORD dwBytesRead    = 0;
     DWORD dwBytesWritten = 0; 
+    DWORD dwBytestoWrite = 0; 
 
     DWORD BytesPerSector = 0; 
     DWORD Size = 0; // data buffer size
@@ -55,7 +56,7 @@ int FilesCreate(UINT NumberOffiles){
     TCHAR szTempFileName[MAX_PATH];  
     TCHAR lpTempPathBuffer[MAX_PATH];
     char  chBuffer[BUFSIZE]; 
-    void  *buffer;
+    char  *buffer;
     void  *BufferAligned;
     double time_spent;
     UINT  rand;
@@ -138,6 +139,26 @@ int FilesCreate(UINT NumberOffiles){
     
 	}
 
+
+	// Create random stream
+        UINT i = 0;
+	for(i = 0; i <= rand; i++){
+		buffer[i] = GetRandNum();
+	}
+
+	// Write stream to file
+	dwBytestoWrite = strlen(buffer);
+	fSuccess = WriteFile(hFile,
+			buffer,
+			dwBytestoWrite,
+			&dwBytesWritten,
+			NULL);
+	if(FALSE == fSuccess){
+		printf("WriteFile failed with error: %d\n",
+			GetLastError());
+	}
+
+	/*
 	// extend the file size
 	ErrorSetFilePointer = SetFilePointer(hFile,
 			             rand, 
@@ -152,7 +173,7 @@ int FilesCreate(UINT NumberOffiles){
         ErrorSetEndOfFile = SetEndOfFile(hFile);
 	if(FALSE == ErrorSetEndOfFile){
 		printf("SetEndOfFile failed with error: %d\n", GetLastError());
-	}
+	}*/
 
 	// cleaning after each iteration 
     	VirtualFree(buffer,
