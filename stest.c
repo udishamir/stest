@@ -6,6 +6,7 @@
 // prototypes 
 int FilesCreate(UINT NumberOffiles);
 int ConnectWininet(LPCTSTR address);
+BOOL SSLConnectWininet(char *address);
 
 __int64 GetSitesListSize(){
     HANDLE hFile;
@@ -67,7 +68,7 @@ int ReadSiteUrl(int szTestFile){
 
     // no general error
     if(dwFileSize != 0xFFFFFFFF){
-	    void *pszFileText;
+	    char *pszFileText;
 
 	    pszFileText = VirtualAlloc(NULL,
 			    	dwFileSize,
@@ -75,11 +76,13 @@ int ReadSiteUrl(int szTestFile){
 				PAGE_READWRITE);
 
             if(pszFileText != NULL){
-		    printf("HTTP test ....\n");
+		    printf("[ HTTP and TLS connection  .... ]\n\n");
 
 		    while((fgets(pszFileText, dwFileSize, fp)) != NULL){
-			    // initiating HTTP connection
-			    ConnectWininet(pszFileText);
+			    // remove trailing \n
+			    pszFileText[strlen(pszFileText) - 1] = '\0';
+			    // SSL connection
+			    SSLConnectWininet(pszFileText);
 		    }
 
 		   // close stream handle

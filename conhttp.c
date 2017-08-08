@@ -61,7 +61,7 @@ int ConnectWininet(LPCTSTR address){
 		      0);
     }
 
-    printf("sending GET request .... \n");
+    printf("HTTP:: sending GET request .... \n");
     // sending request
     if(hRequest){
        bResults = HttpSendRequest(hRequest, 
