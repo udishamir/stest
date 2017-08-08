@@ -46,7 +46,7 @@ __int64 GetSitesListSize(){
 /* 
  * handle HTTP connection 
  * first reading the file and send each URL to the HTTP function
- * the idea is to initiate connection to as much different sites
+ * the idea is to initiate many connectiop
  * and testing the impact of hooking
 */
 
@@ -76,11 +76,12 @@ int ReadSiteUrl(int szTestFile){
 				PAGE_READWRITE);
 
             if(pszFileText != NULL){
-		    printf("[ HTTP and TLS connection  .... ]\n\n");
+		    printf("[ TLS connection  .... ]\n\n");
 
 		    while((fgets(pszFileText, dwFileSize, fp)) != NULL){
 			    // remove trailing \n
 			    pszFileText[strlen(pszFileText) - 1] = '\0';
+
 			    // SSL connection
 			    SSLConnectWininet(pszFileText);
 		    }
